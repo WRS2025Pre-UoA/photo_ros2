@@ -16,7 +16,7 @@ class ImageClickPublisher(Node):
             self.create_publisher(Image, 'debris_image', 1),
             self.create_publisher(Image, 'victim_image', 1)
         ]
-        self.txt_publisher = self.create_publisher(String, 'photo_result',1)
+        self.txt_publisher = self.create_publisher(String, 'photo_txt_result',1)
         self.bridge = CvBridge()
        
         self.topic_sub = self.create_subscription(
@@ -30,15 +30,16 @@ class ImageClickPublisher(Node):
         try:
             cv_bridge = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
             texts = ["Environment","Debris","Victim"]
-            num = distribute_photo.distribute(cv_bridge,texts)
+            num1 = distribute_photo.distribute(cv_bridge,texts)
 
-            text = distribute_photo.write_param()
+            zone = ["pipes","pump","boiler"]
+            num2 = distribute_photo.distribute(cv_bridge,zone)
             
             photo_result_txt = String()
-            photo_result_txt.data = text
+            photo_result_txt.data = zone[num2]
             self.txt_publisher.publish(photo_result_txt)
-            result_image = self.bridge.cv2_to_imgmsg(cv_bridge,'bgr8')
-            self.image_pubs[num].publish(result_image)
+            result_image = msg
+            self.image_pubs[num1].publish(result_image)
         except CvBridgeError as e:
             self.get_logger().error(f'Failed to convert image: {e}')
 

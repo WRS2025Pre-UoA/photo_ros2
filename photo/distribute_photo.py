@@ -8,6 +8,13 @@ def mouseEvents(event, x, y, flags, points):
         points.append([x, y])
 
 def distribute(img,values):
+
+    h,w = img.shape[:2]
+    nw = 1280
+    aspect = w/h
+    nh = int(nw / aspect)
+    img = cv2.resize(img,(nw,nh))
+
     button_positions = []
     baseX = 20
     diffX = 140
