@@ -21,7 +21,7 @@ def distribute(img,values):
     baseY = 45
     diffY = 70
 
-    for y in range(3):
+    for y in range(len(values)):
         for x in range(1):
             pos_x = baseX+diffX*x
             pos_y = baseY+diffY*y
